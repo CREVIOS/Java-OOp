@@ -15,6 +15,14 @@ public class system {
        SavingsAccount start = new SavingsAccount(10000);
        asif.setAccount(start);
        System.out.println(asif.getAccount().calculateInterest(5));
+       Customer.SinglePerson sadek = new Customer.SinglePerson("sadek", "aa@gmail.com","01616",bank_asia,"22345", "00022");
+       bank_asia.addCustomer(sadek);
+       System.out.println(bank_asia.getCustomerInfoByAccountNumber("22345"));
+       SavingsAccount finish = new SavingsAccount(20000);
+       sadek.setAccount(finish);
+       System.out.println(sadek.getAccount().calculateInterest(10));
+       bank_asia.transferBalance("22345","12345",5000);
+       System.out.println(sadek.getAccount().getBalance());
 
     }
 }
