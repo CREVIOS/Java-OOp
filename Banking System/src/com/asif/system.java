@@ -23,6 +23,10 @@ public class system {
        System.out.println(sadek.getAccount().calculateInterest(10));
        bank_asia.transferBalance("22345","12345",5000);
        System.out.println(sadek.getAccount().getBalance());
+       System.out.println(asif.getAccount().getBalance());
+       asif.getAccount().withdrawToBkash(1000,"0199999");
+       System.out.println(asif.getAccount().getBalance());
+
 
     }
 }
