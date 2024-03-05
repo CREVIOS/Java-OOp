@@ -161,7 +161,7 @@ public class SystemMenu {
                         break;
 
                     default:
-                        System.out.println("Invalid choice. Please enter a number between 1 and 7.");
+                        System.out.println("Invalid choice. Please enter a number between 1 and 9.");
                 }
             }
 
