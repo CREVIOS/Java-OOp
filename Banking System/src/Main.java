@@ -1,7 +1,3 @@
-
-
-import com.asif.client.Customer;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -9,7 +5,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    public class Bank {
+    public static class Bank {
         String bank_name;
         String bank_address;
 
@@ -192,14 +188,14 @@ public class Main {
     }
 
 
-    public class Client {
+    public static class Client {
 
         protected String name;
         protected String email;
         protected String phoneNumber;
-        protected com.asif.bank.Bank bank;
+        protected Bank bank;
 
-        public Client(String name, String email, String phoneNumber, com.asif.bank.Bank bank) {
+        public Client(String name, String email, String phoneNumber, Bank bank) {
             this.name = name;
             this.email = email;
             this.phoneNumber = phoneNumber;
@@ -227,12 +223,12 @@ public class Main {
 
     }
 
-    public class Customer extends Client {
+    public  static class Customer extends Client {
 
         protected String account_number;
         protected Account account; // Link to Account
 
-        public Customer(String name, String email, String phoneNumber, com.asif.bank.Bank bank) {
+        public Customer(String name, String email, String phoneNumber, Bank bank) {
             super(name, email, phoneNumber, bank);
             this.account_number = null;     }
 
@@ -252,10 +248,10 @@ public class Main {
             this.account_number = uniqueAccountNumber;
         }
 
-        public class SinglePerson extends Customer {
+        public static class SinglePerson extends Customer {
 
             String Tin_number;
-            public SinglePerson(String name, String email, String phoneNumber, com.asif.bank.Bank bank, String Tin_number) {
+            public SinglePerson(String name, String email, String phoneNumber, Bank bank, String Tin_number) {
                 super(name, email, phoneNumber, bank);
                 this.Tin_number = Tin_number;
             }
@@ -265,10 +261,10 @@ public class Main {
             }
         }
 
-        public class Organization extends Customer{
+        public static class Organization extends Customer{
 
             String Bin_number;
-            public Organization(String name, String email, String phoneNumber, com.asif.bank.Bank bank, String Bin_number) {
+            public Organization(String name, String email, String phoneNumber, Bank bank, String Bin_number) {
                 super(name, email, phoneNumber, bank);
                 this.Bin_number = Bin_number;
             }
@@ -284,7 +280,7 @@ public class Main {
 
 
 
-    public abstract class Account {
+    public static abstract class Account {
         protected double balance;
         public abstract double calculateInterest(int years);
 
@@ -338,7 +334,7 @@ public class Main {
         }
     }
 
-    public class SalaryAccount extends com.asif.account.Account {
+    public static class SalaryAccount extends Account {
         private final static double INTEREST_RATE = 0.02; // 2%
 
         public SalaryAccount(double balance) {
@@ -351,7 +347,7 @@ public class Main {
         }
     }
 
-    public class SavingsAccount extends com.asif.account.Account {
+    public static class SavingsAccount extends Account {
         private final static double INTEREST_RATE = 0.025; // 2.5%
 
         public SavingsAccount(double balance) {
@@ -367,10 +363,10 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        List<com.asif.bank.Bank> banks = new ArrayList<>();
-        banks.add(new com.asif.bank.Bank("Bank Asia", "123 Bank Street"));
-        banks.add(new com.asif.bank.Bank("Bank Pacific", "456 Ocean Avenue"));
-        banks.add(new com.asif.bank.Bank("Bank Global", "789 Global Lane"));
+        List<Bank> banks = new ArrayList<>();
+        banks.add(new Bank("Bank Asia", "123 Bank Street"));
+        banks.add(new Bank("Bank Pacific", "456 Ocean Avenue"));
+        banks.add(new Bank("Bank Global", "789 Global Lane"));
         boolean exit = false;
 
         while (!exit) {
@@ -394,7 +390,7 @@ public class Main {
                 continue;
             }
 
-            com.asif.bank.Bank selectedBank = banks.get(bankChoice - 1);
+           Bank selectedBank = banks.get(bankChoice - 1);
             boolean bankExit = false;
 
             while (!bankExit) {
@@ -404,10 +400,8 @@ public class Main {
                 System.out.println("3. Transfer Balance");
                 System.out.println("4. Display Customer Info");
                 System.out.println("5. Balance Inquiry");
-                System.out.println("6. Withdraw Using Cheque");
-                System.out.println("7. Withdraw to Bkash");
-                System.out.println("8. Withdraw Using Credit Card");
-                System.out.println("9. Return to Main Menu");
+                System.out.println("6. Withdraw amount");
+                System.out.println("7. Return to Main Menu");
                 System.out.print("Enter your choice: ");
 
                 int choice = scanner.nextInt();
@@ -429,7 +423,7 @@ public class Main {
                         System.out.print("Enter TIN Number: ");
                         String tinNumber = scanner.nextLine();
 
-                        com.asif.client.Customer.SinglePerson customer = new com.asif.client.Customer.SinglePerson(name, email, phone, selectedBank, tinNumber);
+                        Customer.SinglePerson customer = new Customer.SinglePerson(name, email, phone, selectedBank, tinNumber);
                         String accountNumber = selectedBank.addCustomer(customer);
                         System.out.println("Your Account Number: " + accountNumber);
                         System.out.println("Customer added successfully.");
@@ -450,10 +444,10 @@ public class Main {
                         double amount = scanner.nextDouble();
 
                         if (ac_choice == 1) {
-                            com.asif.account.SavingsAccount savingsAccount = new com.asif.account.SavingsAccount(amount);
+                            SavingsAccount savingsAccount = new SavingsAccount(amount);
                             customer.setAccount(savingsAccount);
                         } else {
-                            com.asif.account.SalaryAccount salaryAccount = new com.asif.account.SalaryAccount(amount);
+                            SalaryAccount salaryAccount = new SalaryAccount(amount);
                             customer.setAccount(salaryAccount);
                         }
                         System.out.println("Account created and amount added successfully!");
@@ -467,7 +461,6 @@ public class Main {
                         System.out.print("Enter Amount to Transfer: ");
                         amount = scanner.nextDouble();
                         scanner.nextLine(); // Consume newline left-over
-
                         selectedBank.transferBalance(senderAccountNumber, recipientAccountNumber, amount);
                         break;
 
@@ -483,36 +476,61 @@ public class Main {
                         System.out.println(selectedBank.getCustomerBalanceByAccountNumber(inquiryAccountNumber));
                         break;
 
-                    case 6: // Withdraw Using Cheque
-                        System.out.print("Enter Account Number: ");
-                        String accountForCheque = scanner.nextLine();
-                        System.out.print("Enter Amount to Withdraw: ");
-                        double chequeAmount = scanner.nextDouble();
-                        scanner.nextLine(); // Consume newline left-over
-                        selectedBank.withdrawUsingCheque(accountForCheque, chequeAmount);
-                        break;
+                    case 6:
+                        boolean backToMainMenu = false; // Flag to control the loop
+                        while (!backToMainMenu) {
+                            System.out.println("\n=== Withdraw Menu ===");
+                            System.out.println("1. Withdraw Using Cheque");
+                            System.out.println("2. Withdraw to Bkash");
+                            System.out.println("3. Withdraw Using Credit Card");
+                            System.out.println("4. Return to Previous Menu");
+                            System.out.print("Enter your choice: ");
+                            int withdrawChoice = scanner.nextInt();
+                            scanner.nextLine(); // Consume newline left-over
 
-                    case 7: // Withdraw to Bkash
-                        System.out.print("Enter Account Number: ");
-                        String accountForBkash = scanner.nextLine();
-                        System.out.print("Enter Bkash Number: ");
-                        String bkashNumber = scanner.nextLine();
-                        System.out.print("Enter Amount to Withdraw: ");
-                        double bkashAmount = scanner.nextDouble();
-                        scanner.nextLine(); // Consume newline left-over
-                        selectedBank.withdrawToBkash(accountForBkash, bkashAmount, bkashNumber);
-                        break;
+                            switch (withdrawChoice) {
+                                case 1:
+                                    System.out.print("Enter Account Number: ");
+                                    String accountForCheque = scanner.nextLine();
+                                    System.out.print("Enter Amount to Withdraw: ");
+                                    double chequeAmount = scanner.nextDouble();
+                                    scanner.nextLine(); // Consume newline left-over
+                                    selectedBank.withdrawUsingCheque(accountForCheque, chequeAmount);
+                                    //System.out.println("Withdrawal of " + chequeAmount + " using cheque from account " + accountForCheque + " processed.");
+                                    break;
 
-                    case 8: // Withdraw Using Credit Card
-                        System.out.print("Enter Account Number: ");
-                        String accountForCreditCard = scanner.nextLine();
-                        System.out.print("Enter Amount to Withdraw: ");
-                        double creditCardAmount = scanner.nextDouble();
-                        scanner.nextLine(); // Consume newline left-over
-                        selectedBank.withdrawUsingCreditCard(accountForCreditCard,creditCardAmount);
-                        break;
+                                case 2 :
+                                    System.out.print("Enter Account Number: ");
+                                    String accountForBkash = scanner.nextLine();
+                                    System.out.print("Enter Bkash Number: ");
+                                    String bkashNumber = scanner.nextLine();
+                                    System.out.print("Enter Amount to Withdraw: ");
+                                    double bkashAmount = scanner.nextDouble();
+                                    scanner.nextLine(); // Consume newline left-over
+                                    selectedBank.withdrawToBkash(accountForBkash, bkashAmount, bkashNumber);
+                                    //System.out.println("Withdrawal of " + bkashAmount + " to Bkash number " + bkashNumber + " from account " + accountForBkash + " processed.");
+                                    break;
 
-                    case 9: // Exit
+                                case 3:
+                                    System.out.print("Enter Account Number: ");
+                                    String accountForCreditCard = scanner.nextLine();
+                                    System.out.print("Enter Amount to Withdraw: ");
+                                    double creditCardAmount = scanner.nextDouble();
+                                    scanner.nextLine(); // Consume newline left-over
+                                    selectedBank.withdrawUsingCreditCard(accountForCreditCard,creditCardAmount);
+                                    //System.out.println("Withdrawal of " + creditCardAmount + " using credit card from account " + accountForCreditCard + " processed.");
+                                    break;
+
+                                case 4:
+                                    backToMainMenu = true;
+                                    break;
+
+                                default:
+                                    System.out.println("Invalid choice. Please enter a number between 1 and 4.");
+                            }
+                        }
+
+                    case 7: // Exit
                         exit = true;
                         System.out.println("Exiting...");
                         break;

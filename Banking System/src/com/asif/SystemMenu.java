@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class SystemMenu {
+
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         List<Bank> banks = new ArrayList<>();
@@ -47,10 +49,8 @@ public class SystemMenu {
                 System.out.println("3. Transfer Balance");
                 System.out.println("4. Display Customer Info");
                 System.out.println("5. Balance Inquiry");
-                System.out.println("6. Withdraw Using Cheque");
-                System.out.println("7. Withdraw to Bkash");
-                System.out.println("8. Withdraw Using Credit Card");
-                System.out.println("9. Return to Main Menu");
+                System.out.println("6. Withdraw amount");
+                System.out.println("7. Return to Main Menu");
                 System.out.print("Enter your choice: ");
 
                 int choice = scanner.nextInt();
@@ -110,7 +110,6 @@ public class SystemMenu {
                         System.out.print("Enter Amount to Transfer: ");
                         amount = scanner.nextDouble();
                         scanner.nextLine(); // Consume newline left-over
-
                         selectedBank.transferBalance(senderAccountNumber, recipientAccountNumber, amount);
                         break;
 
@@ -126,46 +125,73 @@ public class SystemMenu {
                         System.out.println(selectedBank.getCustomerBalanceByAccountNumber(inquiryAccountNumber));
                         break;
 
-                    case 6: // Withdraw Using Cheque
-                        System.out.print("Enter Account Number: ");
-                        String accountForCheque = scanner.nextLine();
-                        System.out.print("Enter Amount to Withdraw: ");
-                        double chequeAmount = scanner.nextDouble();
-                        scanner.nextLine(); // Consume newline left-over
-                        selectedBank.withdrawUsingCheque(accountForCheque, chequeAmount);
-                        break;
+                    case 6:
+                        boolean backToMainMenu = false; // Flag to control the loop
+                        while (!backToMainMenu) {
+                            System.out.println("\n=== Withdraw Menu ===");
+                            System.out.println("1. Withdraw Using Cheque");
+                            System.out.println("2. Withdraw to Bkash");
+                            System.out.println("3. Withdraw Using Credit Card");
+                            System.out.println("4. Return to Previous Menu");
+                            System.out.print("Enter your choice: ");
+                            int withdrawChoice = scanner.nextInt();
+                            scanner.nextLine(); // Consume newline left-over
 
-                    case 7: // Withdraw to Bkash
-                        System.out.print("Enter Account Number: ");
-                        String accountForBkash = scanner.nextLine();
-                        System.out.print("Enter Bkash Number: ");
-                        String bkashNumber = scanner.nextLine();
-                        System.out.print("Enter Amount to Withdraw: ");
-                        double bkashAmount = scanner.nextDouble();
-                        scanner.nextLine(); // Consume newline left-over
-                        selectedBank.withdrawToBkash(accountForBkash, bkashAmount, bkashNumber);
-                        break;
+                            switch (withdrawChoice) {
+                                case 1:
+                                    System.out.print("Enter Account Number: ");
+                                    String accountForCheque = scanner.nextLine();
+                                    System.out.print("Enter Amount to Withdraw: ");
+                                    double chequeAmount = scanner.nextDouble();
+                                    scanner.nextLine(); // Consume newline left-over
+                                    selectedBank.withdrawUsingCheque(accountForCheque, chequeAmount);
+                                    //System.out.println("Withdrawal of " + chequeAmount + " using cheque from account " + accountForCheque + " processed.");
+                                    break;
 
-                    case 8: // Withdraw Using Credit Card
-                        System.out.print("Enter Account Number: ");
-                        String accountForCreditCard = scanner.nextLine();
-                        System.out.print("Enter Amount to Withdraw: ");
-                        double creditCardAmount = scanner.nextDouble();
-                        scanner.nextLine(); // Consume newline left-over
-                        selectedBank.withdrawUsingCreditCard(accountForCreditCard,creditCardAmount);
-                        break;
+                                case 2 :
+                                    System.out.print("Enter Account Number: ");
+                                    String accountForBkash = scanner.nextLine();
+                                    System.out.print("Enter Bkash Number: ");
+                                    String bkashNumber = scanner.nextLine();
+                                    System.out.print("Enter Amount to Withdraw: ");
+                                    double bkashAmount = scanner.nextDouble();
+                                    scanner.nextLine(); // Consume newline left-over
+                                    selectedBank.withdrawToBkash(accountForBkash, bkashAmount, bkashNumber);
+                                    //System.out.println("Withdrawal of " + bkashAmount + " to Bkash number " + bkashNumber + " from account " + accountForBkash + " processed.");
+                                    break;
 
-                    case 9: // Exit
+                                case 3:
+                                    System.out.print("Enter Account Number: ");
+                                    String accountForCreditCard = scanner.nextLine();
+                                    System.out.print("Enter Amount to Withdraw: ");
+                                    double creditCardAmount = scanner.nextDouble();
+                                    scanner.nextLine(); // Consume newline left-over
+                                    selectedBank.withdrawUsingCreditCard(accountForCreditCard,creditCardAmount);
+                                    //System.out.println("Withdrawal of " + creditCardAmount + " using credit card from account " + accountForCreditCard + " processed.");
+                                    break;
+
+                                case 4:
+                                    backToMainMenu = true;
+                                    break;
+
+                                default:
+                                    System.out.println("Invalid choice. Please enter a number between 1 and 4.");
+                            }
+                        }
+
+                    case 7: // Exit
                         exit = true;
                         System.out.println("Exiting...");
                         break;
 
                     default:
-                        System.out.println("Invalid choice. Please enter a number between 1 and 9.");
+                        System.out.println("Invalid choice. Please enter a number between 1 and 7.");
                 }
             }
 
             scanner.close();
         }
     }
+
+
 }

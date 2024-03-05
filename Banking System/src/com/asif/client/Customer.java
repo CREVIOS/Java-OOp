@@ -10,7 +10,8 @@ public class Customer extends Client{
 
     public Customer(String name, String email, String phoneNumber, Bank bank) {
         super(name, email, phoneNumber, bank);
-        this.account_number = null;     }
+        this.account_number = null;
+    }
 
     public String getAccountNumber() {
         return this.account_number;
